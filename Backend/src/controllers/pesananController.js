@@ -1,41 +1,13 @@
 const MenuModel = require('../models/menuModel')
-const KategoriModel = require('../models/kategoriModel')
 const PesananModel = require('../models/pesananModel')
 
 const getMenus = async (req, res) => {
     try {
-        const data = await MenuModel.getAvailableMenus();
+        const data = await MenuModel.fetchMenus();
 
         res.status(200).json({
             success: true,
             message: "Berhasil ambil data menu",
-            data: data
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-};
-
-const getKategori = async (req, res) => {
-    try {
-        const menuId = req.params.menu_id;
-
-        if (!menuId) {
-            return res.status(400).json({
-                success: false,
-                message: "menu_id wajib diisi"
-            });
-        }
-
-        const data = await KategoriModel.getAvailableKategori(menuId);
-
-        res.status(200).json({
-            success: true,
-            message: "Berhasil ambil kategori",
             data: data
         });
 
@@ -156,7 +128,6 @@ const getListPesanan = async (req, res) => {
 
 module.exports = {
   getMenus,
-  getKategori,
   createPesanan,
   updatePesanan,
   deletePesanan,
