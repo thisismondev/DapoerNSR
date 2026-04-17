@@ -10,9 +10,9 @@
     "migrate:prod": "node scripts/migrations.js prod up",
     "migrate:prod:down": "node scripts/migrations.js prod down",
     "migrate:create": "node-pg-migrate create",
-    "start": "cross-env APP_ENV=prod node server.js",
+    "start": "node server.js",
     "start:dev": "cross-env APP_ENV=dev nodemon server.js",
-    "start:prod": "cross-env APP_ENV=prod node server.js",
+    "start:prod": "node server.js",
     "start:docker": "npm run migrate:prod && npm run start:prod",
     "dev": "npm run start:dev"
   },
