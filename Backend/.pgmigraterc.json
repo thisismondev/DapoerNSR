@@ -1,0 +1,6 @@
+{
+  "migrationsTable": "pgmigrations",
+  "migrationsDir": "migrations",
+  "createMigrationsFolder": true,
+  "logVerbosity": "info"
+}
