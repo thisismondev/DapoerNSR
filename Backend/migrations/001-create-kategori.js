@@ -11,7 +11,7 @@ exports.up = async (pgm) => {
     { ifNotExists: true },
   );
 
-  await pgm.db.query(`
+  pgm.sql(`
     INSERT INTO kategori (kategori_id, nama_kategori, created_at)
     VALUES
       (1, 'Kecil', '2026-04-15T02:28:03.595Z'),
@@ -20,7 +20,7 @@ exports.up = async (pgm) => {
     ON CONFLICT DO NOTHING
   `);
 
-  await pgm.db.query(`
+  pgm.sql(`
     SELECT setval(
       'kategori_kategori_id_seq',
       COALESCE((SELECT MAX(kategori_id) FROM kategori), 1),

@@ -10,11 +10,11 @@ const isPositiveInteger = (value) => Number.isInteger(value) && value > 0;
 const getHttpStatus = (err) => err.statusCode || err.status || 500;
 
 const validatePesananBody = (body, { allowStatus = false } = {}) => {
-  const { nama, no_hp, alamat, metode_pembayaran, pengiriman, ongkir, items, status } = body;
+  const { nama, no_hp, alamat, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, ongkir, items, status } = body;
   const parsedOngkir = ongkir === undefined ? 0 : Number(ongkir);
   const parsedStatus = status === undefined ? undefined : Number(status);
 
-  if (!nama || !no_hp || !alamat || !metode_pembayaran || !pengiriman) {
+  if (!nama || !no_hp || !alamat || !metode_pembayaran || !tgl_pengiriman || !waktu_pengiriman) {
     const error = new Error('Field pesanan wajib lengkap');
     error.statusCode = 400;
     throw error;
@@ -65,7 +65,8 @@ const validatePesananBody = (body, { allowStatus = false } = {}) => {
     no_hp,
     alamat,
     metode_pembayaran,
-    pengiriman,
+    tgl_pengiriman,
+    waktu_pengiriman,
     ongkir: parsedOngkir,
     items: normalizedItems,
     ...(allowStatus && parsedStatus !== undefined ? { status: parsedStatus } : {}),

@@ -10,7 +10,8 @@ exports.up = async (pgm) => {
       alamat: { type: 'text', notNull: true },
       status: { type: 'smallint', notNull: true, default: 1 },
       metode_pembayaran: { type: 'varchar(50)', notNull: true },
-      pengiriman: { type: 'varchar(50)', notNull: true },
+      tgl_pengiriman: { type: 'date', notNull: true },
+      waktu_pengiriman: { type: 'time', notNull: true },
       total_harga: { type: 'integer', notNull: true, default: 0 },
       ongkir: { type: 'integer', notNull: true, default: 0 },
       created_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') },
@@ -18,7 +19,7 @@ exports.up = async (pgm) => {
     { ifNotExists: true },
   );
 
-  await pgm.db.query(`
+  pgm.sql(`
     INSERT INTO pesanan (
       pesanan_id,
       nama,
@@ -26,7 +27,8 @@ exports.up = async (pgm) => {
       alamat,
       status,
       metode_pembayaran,
-      pengiriman,
+      tgl_pengiriman,
+      waktu_pengiriman,
       total_harga,
       ongkir,
       created_at
@@ -39,7 +41,8 @@ exports.up = async (pgm) => {
         'address_masked_0001',
         1,
         'cash',
-        '2026-04-15T14:30:00+08:00',
+        '2026-04-15',
+        '14:30:00',
         180000,
         5000,
         '2026-04-15T02:34:33.380Z'
@@ -47,7 +50,7 @@ exports.up = async (pgm) => {
     ON CONFLICT DO NOTHING
   `);
 
-  await pgm.db.query(`
+  pgm.sql(`
     SELECT setval(
       'pesanan_pesanan_id_seq',
       COALESCE((SELECT MAX(pesanan_id) FROM pesanan), 1),

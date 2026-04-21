@@ -11,7 +11,7 @@ const createAppError = (message, statusCode = 400) => {
 
 // ✅ CREATE
 const createPesanan = async (data) => {
-  const { nama, no_hp, alamat, metode_pembayaran, pengiriman, ongkir, items } = data;
+  const { nama, no_hp, alamat, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, ongkir, items } = data;
 
   const client = await pool.connect();
 
@@ -24,10 +24,10 @@ const createPesanan = async (data) => {
 
     const resultPesanan = await client.query(
       `INSERT INTO pesanan 
-            (nama, no_hp, alamat, status, metode_pembayaran, pengiriman, total_harga, ongkir)
-            VALUES ($1,$2,$3,$4,$5,$6,0,$7)
+            (nama, no_hp, alamat, status, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, total_harga, ongkir)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,0,$8)
             RETURNING pesanan_id`,
-      [nama, no_hp, alamat, STATUS_BELUM, metode_pembayaran, pengiriman, ongkir],
+      [nama, no_hp, alamat, STATUS_BELUM, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, ongkir],
     );
 
     const pesanan_id = resultPesanan.rows[0].pesanan_id;
@@ -79,7 +79,7 @@ const createPesanan = async (data) => {
 
 // ✅ UPDATE
 const updatePesanan = async (id, data) => {
-  const { nama, no_hp, alamat, metode_pembayaran, pengiriman, ongkir, items, status } = data;
+  const { nama, no_hp, alamat, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, ongkir, items, status } = data;
 
   const client = await pool.connect();
 
@@ -130,9 +130,9 @@ const updatePesanan = async (id, data) => {
 
     await client.query(
       `UPDATE pesanan
-            SET nama=$1, no_hp=$2, alamat=$3, metode_pembayaran=$4, pengiriman=$5, ongkir=$6, status=$7, total_harga=$8
-            WHERE pesanan_id=$9`,
-      [nama, no_hp, alamat, metode_pembayaran, pengiriman, ongkir, nextStatus, total_harga, id],
+            SET nama=$1, no_hp=$2, alamat=$3, metode_pembayaran=$4, tgl_pengiriman=$5, waktu_pengiriman=$6, ongkir=$7, status=$8, total_harga=$9
+            WHERE pesanan_id=$10`,
+      [nama, no_hp, alamat, metode_pembayaran, tgl_pengiriman, waktu_pengiriman, ongkir, nextStatus, total_harga, id],
     );
 
     await client.query(`DELETE FROM pesanan_menu WHERE pesanan_id=$1`, [id]);
@@ -189,6 +189,8 @@ const getListPesanan = async () => {
             p.status,
             p.total_harga,
             p.ongkir,
+            p.tgl_pengiriman,
+            p.waktu_pengiriman,
             p.created_at,
 
             COUNT(pm.pesanan_menu_id) as total_item
@@ -233,7 +235,8 @@ const getDetailPesanan = async (id) => {
     alamat: result.rows[0].alamat,
     status: result.rows[0].status,
     metode_pembayaran: result.rows[0].metode_pembayaran,
-    pengiriman: result.rows[0].pengiriman,
+    tgl_pengiriman: result.rows[0].tgl_pengiriman,
+    waktu_pengiriman: result.rows[0].waktu_pengiriman,
     total_harga: result.rows[0].total_harga,
     ongkir: result.rows[0].ongkir,
     created_at: result.rows[0].created_at,

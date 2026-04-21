@@ -23,7 +23,7 @@ exports.up = async (pgm) => {
     { ifNotExists: true },
   );
 
-  await pgm.db.query(`
+  pgm.sql(`
     INSERT INTO harga_menu (harga_menu_id, menu_id, kategori_id, harga_satuan, created_at)
     VALUES
       (1, 1, 2, 60000, '2026-04-15T02:29:56.493Z'),
@@ -33,7 +33,7 @@ exports.up = async (pgm) => {
     ON CONFLICT DO NOTHING
   `);
 
-  await pgm.db.query(`
+  pgm.sql(`
     SELECT setval(
       'harga_menu_harga_menu_id_seq',
       COALESCE((SELECT MAX(harga_menu_id) FROM harga_menu), 1),
